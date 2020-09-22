@@ -13,7 +13,7 @@ namespace CalculatorDemo
     public class Refactor
     {
 
-        private string[] Results = new String[10];
+        private string[] Results = new String[11];
         private int Index = -1;
 
         public Refactor()
@@ -22,7 +22,7 @@ namespace CalculatorDemo
 
         private int NextIndex()
         {
-            if (Index >= 9)
+            if (Index >= Results.Length - 1)
                 Index = 0;
             else
                 ++Index;
@@ -174,21 +174,28 @@ namespace CalculatorDemo
                 switch (operand)
                 {
                     case "+":
-                        Add(totalVal, rightVal, out result);
+                        if (!Add(totalVal, rightVal, out result))
+                            done = true;
                         break;
                     case "-":
-                        Subtract(totalVal, rightVal, out result);
+                        if (!Subtract(totalVal, rightVal, out result))
+                            done = true;
                         break;
                     case "*":
-                        Multiply(totalVal, rightVal, out result);
+                        if (!Multiply(totalVal, rightVal, out result))
+                            done = true;
                         break;
                     case "/":
-                        Divide(totalVal, rightVal, out result);
+                        if (!Divide(totalVal, rightVal, out result))
+                            done = true;
                         break;
                 }
 
                 // store result
                 Results[NextIndex()] = result;
+
+                // exit if error
+                if (done) return;
 
                 // update total
                 total = result;
@@ -214,6 +221,17 @@ namespace CalculatorDemo
             else
                 return false;
 
+        }
+
+        public static bool CheckNumber(string num)
+        {
+            string validNumChars = "0123456789.";
+
+            if (!validNumChars.Contains(num))
+                return false;
+
+            return true;
+            
         }
 
         public string getResult()
@@ -247,7 +265,7 @@ namespace CalculatorDemo
             while (index < equation.Length && !done)
             {
                 nextChar = equation.Substring(index, 1);
-                if (!CheckOperand(nextChar))
+                if (!CheckOperand(nextChar) && CheckNumber(nextChar))
                 {
                     number += nextChar;
                     ++index;
@@ -284,9 +302,10 @@ namespace CalculatorDemo
         public string getPreviousResult(int x)
         {
             // check for allowable value
-            if (x > Results.Length)
+            if (x < 1 || x > Results.Length )
             {
-                return "Error: Request greater than buffer size";
+                int temp = Results.Length - 1;
+                return "Error: Index must between 1 and " + temp.ToString();
             }
 
             // calculate the index

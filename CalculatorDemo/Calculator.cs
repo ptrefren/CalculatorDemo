@@ -14,7 +14,7 @@ namespace CalculatorDemo
         private string Left;
         private string Right;
         private string Operand;
-        private string[] Results = new String[10];
+        private string[] Results = new String[11];
         private int Index = -1;
 
         public Calculator(string left, string right, string operand)
@@ -41,7 +41,7 @@ namespace CalculatorDemo
 
         private int NextIndex()
         {
-            if (Index >= 9)
+            if (Index >= Results.Length - 1)
                 Index = 0;
             else
                 ++Index;
@@ -203,9 +203,10 @@ namespace CalculatorDemo
         public string getPreviousResult(int x)
         {
             // check for allowable value
-            if (x > Results.Length)
+            if ((x < 1) || (x > Results.Length - 1))
             {
-                return "Error: Request greater than buffer size";
+                int temp = Results.Length - 1;
+                return "Error: Index must between 1 and " + temp.ToString();
             }
 
             // calculate the index
@@ -216,7 +217,6 @@ namespace CalculatorDemo
             // check for empty buffer value
             if (Results[pos] is null)
                 return "Error: Not enough calculations performed";
-
 
             // return result
             return Results[pos];
