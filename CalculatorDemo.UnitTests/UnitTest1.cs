@@ -148,7 +148,7 @@ namespace CalculatorDemo.UnitTests
         }
 
         [TestMethod]
-        public void Test_Get_Previous_Result()
+        public void Test_Calculator_Get_Previous_Result()
         {
             string res;
 
@@ -266,6 +266,63 @@ namespace CalculatorDemo.UnitTests
             Assert.AreEqual("1", res);
 
 
+
+        }
+        
+        [TestMethod]
+        public void Test_Refactor_Get_Previous_Result()
+        {
+            string res;
+
+            Refactor ref_calculator = new Refactor();
+            ref_calculator.Calculate("1+2+4*2+11/5/1-3*9/2+1-2");
+            res = ref_calculator.getResult();
+            Assert.AreEqual("8", res);
+
+            res = ref_calculator.getPreviousResult(1);
+            Assert.AreEqual("10", res);
+
+            res = ref_calculator.getPreviousResult(10);
+            Assert.AreEqual("3", res);
+
+            // check to see if buffer will wrap
+            ref_calculator.Calculate("1+2+4*2+11/5/1-3*9/2+1-2+5");
+            res = ref_calculator.getResult();
+            Assert.AreEqual("13", res);
+
+            res = ref_calculator.getPreviousResult(1);
+            Assert.AreEqual("8", res);
+
+            res = ref_calculator.getPreviousResult(10);
+            Assert.AreEqual("7", res);
+
+        }
+
+        [TestMethod]
+        public void Test_Refactor_Get_PreviousResult_Index()
+        {
+
+            string res;
+
+            Refactor ref_calculator = new Refactor();
+            res = ref_calculator.getPreviousResult(0);
+            Assert.AreEqual("Error: Index must between 1 and 10", res);
+            res = ref_calculator.getPreviousResult(11);
+            Assert.AreEqual("Error: Index must between 1 and 10", res);
+
+        }
+
+        [TestMethod]
+        public void Test_Calculator_Get_PreviousResult_Index()
+        {
+
+            string res;
+
+            Calculator calculator = new Calculator("1", "2", "+");
+            res = calculator.getPreviousResult(0);
+            Assert.AreEqual("Error: Index must between 1 and 10", res);
+            res = calculator.getPreviousResult(11);
+            Assert.AreEqual("Error: Index must between 1 and 10", res);
 
         }
 

@@ -302,7 +302,7 @@ namespace CalculatorDemo
         public string getPreviousResult(int x)
         {
             // check for allowable value
-            if (x < 1 || x > Results.Length )
+            if (x < 1 || x > Results.Length - 1 )
             {
                 int temp = Results.Length - 1;
                 return "Error: Index must between 1 and " + temp.ToString();
